@@ -15,21 +15,21 @@ public class PathService implements IPathService {
     public void findPath(Set<Point> points, Point begin, Point end) {
         begin.setDistance(0);
 
-        Set<Point> settledNodes = new HashSet<>();
-        Set<Point> unsettledNodes = new HashSet<>();
+        Set<Point> settledPoints = new HashSet<>();
+        Set<Point> unsettledPoints = new HashSet<>();
 
-        unsettledNodes.add(begin);
+        unsettledPoints.add(begin);
 
-        while (!settledNodes.contains(end)) {
-            Point currentPoint = unsettledNodes.stream().min(Comparator.comparingInt(Point::getDistance)).get();
-            unsettledNodes.remove(currentPoint);
+        while (unsettledPoints.size() != 0) {
+            Point currentPoint = unsettledPoints.stream().min(Comparator.comparingInt(Point::getDistance)).get();
+            unsettledPoints.remove(currentPoint);
             currentPoint.getLinks().forEach((linkedPoint, distance) -> {
-                if (!settledNodes.contains(linkedPoint)) {
+                if (!settledPoints.contains(linkedPoint)) {
                     computeMinimumDistance(linkedPoint, distance, currentPoint);
-                    unsettledNodes.add(linkedPoint);
+                    unsettledPoints.add(linkedPoint);
                 }
             });
-            settledNodes.add(currentPoint);
+            settledPoints.add(currentPoint);
         }
     }
 
